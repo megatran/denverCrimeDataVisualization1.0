@@ -78,7 +78,7 @@ class StartPage(tk.Frame):
         label = tk.Label(self, text="Start Page", font=LARGE_FONT)
         label.pack(pady=10, padx=10)
 
-        button = ttk.Button(self, text="Visit Page 1",
+        button = ttk.Button(self, text="Crimes Per Month",
                            command=lambda: controller.show_frame(PageOne))
         button.pack()
 
@@ -89,6 +89,63 @@ class StartPage(tk.Frame):
         button3 = ttk.Button(self, text="Graph Page",
                             command=lambda: controller.show_frame(PageThree))
         button3.pack()
+
+
+
+class LiveGraph(tk.Frame):
+    # BEGIN Live Data
+        offenseTypeFilter = ""
+
+        # Query Info
+        mainQuery = """SELECT neighborhood_id, count(neighborhood_id) FROM denver_crime WHERE offense_type_id LIKE (%s)
+                GROUP BY neighborhood_id HAVING count(neighborhood_id) > 3000 ORDER BY count(neighborhood_id) DESC"""
+
+        if offenseTypeFilter == "":
+            offenseTypeFilter = '%'
+
+        prepared = (offenseTypeFilter,)
+        resultSet = pull_data(lwapp.db, mainQuery, query_additional = prepared)
+        neighborhoods = []
+        neighTicks = []
+        crimes = []
+
+        for r in resultSet:
+            neighborhoods.append(r[0])
+            crimes.append(r[1])
+
+        i = 1
+        for x in neighborhoods:
+            neighTicks.append(i)
+            i += 1
+
+        # Offense types
+        offenseTypes = []
+        offenseQuery = """SELECT DISTINCT offense_type_id FROM offense_codes ORDER BY offense_type_id"""
+        resultSet = pull_data(lwapp.db, offenseQuery)
+        for r in resultSet:
+            offenseTypes.append(r[0])
+
+
+        # Buttons and Stuff
+        mainlabel = tk.Label(self, text="Filter By: ", font=LARGE_FONT)
+
+        crimeType = Combobox(self, values = offenseTypes, text='Incident Type')
+        crimeType.pack()
+
+        # Graph
+        liveF = Figure(figsize=(10,4), dpi=100)
+        a = liveF.add_subplot(111) #111 means 1 by 1, 121 means 1 by 2
+
+        a.set_xticks(neighTicks)
+        a.set_xticklabels(neighborhoods)
+        liveF.autofmt_xdate()
+        matplotlib.rcParams.update({'font.size': 7})
+        a.bar(neighTicks, crimes, width=1)
+
+
+        canvas = FigureCanvasTkAgg(liveF, self)
+        canvas.show()
+        canvas.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand = True)
 
 
 class PageOne(tk.Frame):
@@ -111,7 +168,7 @@ class PageOne(tk.Frame):
             prepared = ('%-' + str(x) + '-%',)
             resultCrime.append(pull_data(lwapp.db, query, query_additional = prepared)[0][0])
         
-        print(resultCrime)
+        # print(resultCrime)
 
         cpm = Figure(figsize=(5,5), dpi=100)
         a = cpm.add_subplot(111) #111 means 1 by 1, 121 means 1 by 2
