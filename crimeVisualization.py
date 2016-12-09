@@ -72,6 +72,7 @@ class SeaofBTCapp(tk.Tk):
         frame.tkraise()
 
 
+
 class StartPage(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
@@ -129,48 +130,56 @@ class PageOne(tk.Frame):
         button1.pack()
 
 
-
-
 class PageTwo(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
-        label = tk.Label(self, text="Page Two!!!", font=LARGE_FONT)
+        label = tk.Label(self, text="Pie Chart", font=LARGE_FONT)
         label.pack(pady=10, padx=10)
-	"""import matplotlib
-	matplotlib.use("TkAgg")
-
-	from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2TkAgg
-	from matplotlib.figure import Figure
-	import matplotlib.pyplot as plt
-
-	#All you need to change in here are to take the two count results from the query and put them in the proper place, and take the plot and put it on the canvas. If you run the file as is, you'll see what the pie chart would look like, just not in the actual application.
-
-	#Here are the queries that give you the results for what you need. Replace 215 and 130 in the
-	#sizes = [215,130] line with the results accordingly
-	otherquery = """"""SELECT count(*) FROM denver_crime WHERE NOT is_traffic;"""
-	"""trafficquery = """"""SELECT count(*) FROM denver_crime WHERE is_traffic;"""
-
-	# Data to plot
-	"""labels = 'Traffic-Related', 'All other Incidents'
-
-	#Get these from the query
-	sizes = [215, 130]
-	colors = ['red', 'green']
-	explode = (0.1, 0)  # explode 1st slice
-		 
-	# Plot
-	plt.pie(sizes, explode=explode, labels=labels, colors=colors, autopct='%1.1f%%', shadow=True, startangle=140)
-		 
-	plt.axis('equal')
-	plt.show()"""
 
         button1 = ttk.Button(self, text="Back to Home",
                             command=lambda: controller.show_frame(StartPage))
         button1.pack()
+    # All you need to change in here are to take the two count results from the query and put them in the proper place, and take the plot and put it on the canvas. If you run the file as is, you'll see what the pie chart would look like, just not in the actual application.
 
-        button2 = ttk.Button(self, text="Page One",
-                            command=lambda: controller.show_frame(PageOne))
-        button2.pack()
+    # Here are the queries that give you the results for what you need. Replace 215 and 130 in the
+    # sizes = [215,130] line with the results accordingly
+
+        other_query = """SELECT count(*) FROM denver_crime WHERE is_crime"""
+        traffic_query = """SELECT count(*) FROM denver_crime WHERE is_traffic"""
+        both_query = """SELECT count(*) FROM denver_crime WHERE is_crime AND is_traffic"""
+
+        non_traffic_count = pull_data(lwapp.db, other_query)
+        traffic_count = pull_data(lwapp.db, traffic_query)
+        both_count = pull_data(lwapp.db, both_query)
+
+        print("TRAFFIC COUNT IS")
+        print(traffic_count, non_traffic_count, both_count)
+        # Data to plot
+
+
+        labels = ['Traffic-Related', 'Non-traffic crime', 'Both' ]
+
+        # Get these from the query
+        sizes = [traffic_count[0], non_traffic_count[0], both_count[0]]
+        colors = ['red', 'green', 'gold']
+        explode = (0.1, 0, 0)  # explode 1st slice
+
+        # Plot
+        f = Figure(figsize=(5, 5), dpi=100)
+        plt = f.add_subplot(111)
+        plt.legend(title="Percentage of Incidents (Crime, Traffic, Both")
+        plt.pie(sizes, explode=explode, labels=labels, colors=colors, autopct='%1.1f%%', shadow=True, startangle=140)
+        plt.axis('equal')
+
+
+        canvas = FigureCanvasTkAgg(f, self)
+        canvas.show()
+        canvas.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=True)
+
+        # add navigation bar
+        toolbar = NavigationToolbar2TkAgg(canvas, self)
+        toolbar.update()
+        canvas._tkcanvas.pack()
 
 class PageThree(tk.Frame):
     def __init__(self, parent, controller):
