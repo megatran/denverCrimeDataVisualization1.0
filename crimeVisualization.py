@@ -86,16 +86,26 @@ class PageOne(tk.Frame):
         label = tk.Label(self, text="Crimes per Month", font=LARGE_FONT)
         label.pack(pady=10, padx=10)
 
-        query = """SELECT count(*) FROM denver_crime WHERE reported_date::text LIKE '%-(%s)-%' AND is_crime;"""
+        query = """SELECT count(*) FROM denver_crime WHERE reported_date::text LIKE (%s) AND is_crime;"""
 
         resultMonth = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
         resultCrime = []
 
-        for x in range(1, 13):
-            prepared = (x,)
-            resultCrime.append(pull_data(lwapp.db, query, prepared)
-        
+        for x in range(1, 12):
+            prepared = ('%-' + x + '-%',)
+            resultSet = []
 
+            db = lwapp.db
+            cursor = db.cursor()
+            try:
+                cursor.execute(query, prepared)
+                resultSet = cursor.fetchall()
+                resultCrime.append(resultset)
+            except pg8000.Error as e:
+                messagebox.showerror('Database error', e.args[2])
+
+            #resultCrime.append(pull_data(lwapp.db, query, prepared)
+        
         cpm = Figure(figsize=(5,5), dpi=100)
         a = cpm.add_subplot(111) #111 means 1 by 1, 121 means 1 by 2
 
@@ -104,8 +114,6 @@ class PageOne(tk.Frame):
         canvas = FigureCanvasTkAgg(cpm, self)
         canvas.show()
         canvas.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand = True)
-
-
 
         button1 = ttk.Button(self, text="Back to Home",
                             command=lambda: controller.show_frame(StartPage))
