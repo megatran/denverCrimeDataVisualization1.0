@@ -74,12 +74,19 @@ class SeaofBTCapp(tk.Tk):
 
 
 class StartPage(tk.Frame):
+
+    # Variables
+    offenseTypeFilter = ''
+    neighborhoods = []
+    neighTicks = []
+    crimes = []
+
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
         label = tk.Label(self, text="Start Page", font=LARGE_FONT)
         label.pack(pady=10, padx=10)
 
-        button = ttk.Button(self, text="Visit Page 1",
+        button = ttk.Button(self, text="Crimes Per Month",
                            command=lambda: controller.show_frame(PageOne))
         button.pack()
 
@@ -90,6 +97,82 @@ class StartPage(tk.Frame):
         button3 = ttk.Button(self, text="Graph Page",
                             command=lambda: controller.show_frame(PageThree))
         button3.pack()
+
+        self.loadData()
+        self.loadButtons()
+    
+    def loadButtons(self):
+        # SQL
+        # Offense types
+        offenseTypes = []
+        offenseQuery = """SELECT DISTINCT offense_type_id FROM offense_codes ORDER BY offense_type_id"""
+        resultSet = pull_data(lwapp.db, offenseQuery)
+        for r in resultSet:
+            offenseTypes.append(r[0])
+
+        # Buttons and more
+        mainlabel = tk.Label(self, text="Filter By: ", font=LARGE_FONT)
+        mainlabel.pack()
+
+        crimeTypeFilter = Combobox(self, values = offenseTypes, text='Incident Type')
+        crimeTypeFilter.bind("<<ComboboxSelected>>")
+        crimeTypeFilter.pack()
+
+        go = ttk.Button(self, text="Apply",
+                            command=lambda: self.updateGraph(crimeTypeFilter, a ,canvas))
+        go.pack()
+
+        liveF = Figure(figsize=(10,4), dpi=100)
+        a = liveF.add_subplot(111)
+
+        a.set_xticks(self.neighTicks)
+        a.set_xticklabels(self.neighborhoods)
+        liveF.autofmt_xdate()
+        matplotlib.rcParams.update({'font.size': 7})
+
+        canvas = FigureCanvasTkAgg(liveF, self)
+        canvas.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand = True)
+
+        self.updateGraph(crimeTypeFilter, a, canvas)
+
+
+
+    def loadData(self):
+        # Query Info
+        mainQuery = """SELECT neighborhood_id, count(neighborhood_id) FROM denver_crime WHERE offense_type_id LIKE (%s)
+                GROUP BY neighborhood_id HAVING count(neighborhood_id) > 3000 ORDER BY count(neighborhood_id) DESC"""
+
+        if self.offenseTypeFilter == '':
+            self.offenseTypeFilter = '%'
+
+        prepared = (self.offenseTypeFilter,)
+        resultSet = pull_data(lwapp.db, mainQuery, query_additional = prepared)
+
+        self.neighborhoods[:] = []
+        self.crimes[:] = []
+        for r in resultSet:
+            self.neighborhoods.append(r[0])
+            self.crimes.append(r[1])
+
+        self.neighTicks[:] = []
+        i = 1
+        for x in self.neighborhoods:
+            self.neighTicks.append(i)
+            i += 1
+
+
+    def updateGraph(self, box, a, c):
+        
+
+        self.offenseTypeFilter = box.get()
+        self.loadData()
+
+        a.bar(self.neighTicks, self.crimes, width=1)
+        c.show()
+
+        
+
+
 
 
 class PageOne(tk.Frame):
@@ -112,7 +195,7 @@ class PageOne(tk.Frame):
             prepared = ('%-' + str(x) + '-%',)
             resultCrime.append(pull_data(lwapp.db, query, query_additional = prepared)[0][0])
         
-        print(resultCrime)
+        # print(resultCrime)
 
         cpm = Figure(figsize=(5,5), dpi=100)
         a = cpm.add_subplot(111) #111 means 1 by 1, 121 means 1 by 2
@@ -181,6 +264,36 @@ class PageTwo(tk.Frame):
         toolbar.update()
         canvas._tkcanvas.pack()
 
+        # import matplotlib
+    	# matplotlib.use("TkAgg")
+
+    	# from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2TkAgg
+    	# from matplotlib.figure import Figure
+    	# import matplotlib.pyplot as plt
+
+    	# #All you need to change in here are to take the two count results from the query and put them in the proper place, and take the plot and put it on the canvas. If you run the file as is, you'll see what the pie chart would look like, just not in the actual application.
+
+    	# #Here are the queries that give you the results for what you need. Replace 215 and 130 in the
+    	# #sizes = [215,130] line with the results accordingly
+    	# otherquery = """"""SELECT count(*) FROM denver_crime WHERE NOT is_traffic;"""
+    	# """trafficquery = """"""SELECT count(*) FROM denver_crime WHERE is_traffic;"""
+
+    	# # Data to plot
+    	# """labels = 'Traffic-Related', 'All other Incidents'
+
+    	# #Get these from the query
+    	# sizes = [215, 130]
+    	# colors = ['red', 'green']
+    	# explode = (0.1, 0)  # explode 1st slice
+    		 
+    	# # Plot
+    	# plt.pie(sizes, explode=explode, labels=labels, colors=colors, autopct='%1.1f%%', shadow=True, startangle=140)
+    		 
+    	# plt.axis('equal')
+    	# plt.show()
+
+        
+
 class PageThree(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
@@ -211,8 +324,8 @@ class PageThree(tk.Frame):
                 x_chart.append(res[0])
                 y_chart.append(res[1])
 
-        print(x_chart)
-        print(y_chart)
+        #print(x_chart)
+        #print(y_chart)
 
        # width = 1/1.5
         x = range(len(x_chart))
