@@ -14,6 +14,21 @@ import pg8000
 
 LARGE_FONT = ("Verdana", 12)
 
+def pull_data(db, string_query):
+    ###############
+    # pass in login windows
+    db = db
+    cursor = db.cursor()
+    query = string_query
+    try:
+        cursor.execute(query)
+        resultset = cursor.fetchall()
+        return resultset
+    except pg8000.Error as e:
+        messagebox.showerror('Database error', e.args[2])
+        return None
+
+    ##############
 
 class SeaofBTCapp(tk.Tk):
     def __init__(self, db,*args, **kwargs):
@@ -28,22 +43,11 @@ class SeaofBTCapp(tk.Tk):
 
         container.grid_rowconfigure(0, weight=1)
         container.grid_columnconfigure(0, weight=1)
-###############
-        #pass in login windows
-        self.db = db
-        self.cursor = db.cursor()
-        query = """SELECT * FROM denver_crime WHERE is_traffic"""
-        try:
-            self.cursor.execute(query)
-            resultset = self.cursor.fetchall()
-            #return resultset
-        except pg8000.Error as e:
-            messagebox.showerror('Database error', e.args[2])
-            return None
-        print("result is:")
-        print(resultset)
 
-##############
+        ###configure db####
+        query = """SELECT precinct_id, count(precinct_id) FROM denver_crime GROUP BY precinct_id ORDER BY count(precinct_id) DESC"""
+        result = pull_data(db, query)
+        print(result)
         self.frames = {}
 
         for F in (StartPage, PageOne, PageTwo, PageThree):
