@@ -136,6 +136,33 @@ class PageTwo(tk.Frame):
         tk.Frame.__init__(self, parent)
         label = tk.Label(self, text="Page Two!!!", font=LARGE_FONT)
         label.pack(pady=10, padx=10)
+	"""import matplotlib
+	matplotlib.use("TkAgg")
+
+	from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2TkAgg
+	from matplotlib.figure import Figure
+	import matplotlib.pyplot as plt
+
+	#All you need to change in here are to take the two count results from the query and put them in the proper place, and take the plot and put it on the canvas. If you run the file as is, you'll see what the pie chart would look like, just not in the actual application.
+
+	#Here are the queries that give you the results for what you need. Replace 215 and 130 in the
+	#sizes = [215,130] line with the results accordingly
+	otherquery = """"""SELECT count(*) FROM denver_crime WHERE NOT is_traffic;"""
+	"""trafficquery = """"""SELECT count(*) FROM denver_crime WHERE is_traffic;"""
+
+	# Data to plot
+	"""labels = 'Traffic-Related', 'All other Incidents'
+
+	#Get these from the query
+	sizes = [215, 130]
+	colors = ['red', 'green']
+	explode = (0.1, 0)  # explode 1st slice
+		 
+	# Plot
+	plt.pie(sizes, explode=explode, labels=labels, colors=colors, autopct='%1.1f%%', shadow=True, startangle=140)
+		 
+	plt.axis('equal')
+	plt.show()"""
 
         button1 = ttk.Button(self, text="Back to Home",
                             command=lambda: controller.show_frame(StartPage))
