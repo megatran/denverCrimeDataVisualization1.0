@@ -103,27 +103,18 @@ class PageOne(tk.Frame):
         resultCrime = []
 
         for x in range(1, 12):
-            prepared = ('%-' + x + '-%',)
-            resultSet = []
-
-            db = lwapp.db
-            cursor = db.cursor()
-            try:
-                cursor.execute(query, prepared)
-                resultSet = cursor.fetchall()
-                resultCrime.append(resultset)
-            except pg8000.Error as e:
-                messagebox.showerror('Database error', e.args[2])
-
-            #resultCrime.append(pull_data(lwapp.db, query, prepared)
+            prepared = ('%-' + '%' + str(x) + '-%',)
+            resultCrime.append(pull_data(lwapp.db, query, query_additional = prepared))
         
+        print(resultCrime)
+
         cpm = Figure(figsize=(5,5), dpi=100)
         a = cpm.add_subplot(111) #111 means 1 by 1, 121 means 1 by 2
 
-        a.bar(resultMonth, resultCrime)
+        #a.bar(resultMonth, resultCrime)
 
         canvas = FigureCanvasTkAgg(cpm, self)
-        canvas.show()
+        #canvas.show()
         canvas.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand = True)
 
         button1 = ttk.Button(self, text="Back to Home",
