@@ -21,8 +21,8 @@
       <file leaf-file-name="crimeVisualization.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/crimeVisualization.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="165">
-              <caret line="152" column="38" lean-forward="true" selection-start-line="152" selection-start-column="38" selection-end-line="152" selection-end-column="38" />
+            <state relative-caret-position="360">
+              <caret line="165" column="30" lean-forward="false" selection-start-line="165" selection-start-column="30" selection-end-line="165" selection-end-column="30" />
               <folding>
                 <marker date="1481314147000" expanded="true" signature="4172:4282" ph="SELECT preci... denver_crime" />
               </folding>
@@ -415,8 +415,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/crimeVisualization.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="165">
-          <caret line="152" column="38" lean-forward="true" selection-start-line="152" selection-start-column="38" selection-end-line="152" selection-end-column="38" />
+        <state relative-caret-position="360">
+          <caret line="165" column="30" lean-forward="false" selection-start-line="165" selection-start-column="30" selection-end-line="165" selection-end-column="30" />
           <folding>
             <marker date="1481314147000" expanded="true" signature="4172:4282" ph="SELECT preci... denver_crime" />
           </folding>
