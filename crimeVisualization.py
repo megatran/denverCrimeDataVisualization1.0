@@ -141,14 +141,22 @@ class PageThree(tk.Frame):
         #draw things in backend then bring to front (matplotlib)
 
         f = Figure(figsize=(5,5), dpi=100)
-        a = f.add_subplot(111) #111 means 1 by 1, 121 means 1 by 2
+        plt = f.add_subplot(111) #111 means 1 by 1, 121 means 1 by 2
         #a.plot([1,2,3,4,5,6,7,8],[5,6,1,3,8,9,3,5])
         #a.plot(result[0], result[1])
-        #print(result)
-        #for res in result:
-         #   print(result[0], result[1])
 
-        a.scatter(result[0], result[1], label="crime vs precint", color='k', s=1)
+        x_chart, y_chart = [],[]
+        for res in result:
+            # print(res[0], res[1])
+            if res[0] is not None and res[1] is not None:
+                x_chart.append(res[0])
+                y_chart.append(res[1])
+
+        print(x_chart)
+        print(y_chart)
+
+        width = 1/1.5
+        plt.bar(x_chart,y_chart, width, color="blue")
 
         canvas = FigureCanvasTkAgg(f, self)
         canvas.show()
