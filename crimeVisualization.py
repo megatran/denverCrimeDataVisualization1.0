@@ -86,16 +86,29 @@ class StartPage(tk.Frame):
 class PageOne(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
-        label = tk.Label(self, text="Page One!!!", font=LARGE_FONT)
+        label = tk.Label(self, text="Crimes per Month", font=LARGE_FONT)
         label.pack(pady=10, padx=10)
+
+        query = """SELECT count(*) FROM denver_crime WHERE reported_date::text LIKE '%-(%s)-%' AND is_crime;"""
+
+        resultMonth = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+        resultCrime = []
+
+        for x in range(1, 13)
+            resultCrime.append(pull_data(self, query))
+
+        
+
+        cpm = Figure(figsize=(5,5), dpi=100)
+        a = cpm.add_subplot(111) #111 means 1 by 1, 121 means 1 by 2
+
+        a.plot(resultMonth, resultCrime)
+
+
 
         button1 = ttk.Button(self, text="Back to Home",
                             command=lambda: controller.show_frame(StartPage))
         button1.pack()
-
-        button2 = ttk.Button(self, text="Page Two",
-                            command=lambda: controller.show_frame(PageTwo))
-        button2.pack()
 
 
 
