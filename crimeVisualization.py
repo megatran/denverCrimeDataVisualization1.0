@@ -91,15 +91,19 @@ class PageOne(tk.Frame):
         resultMonth = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
         resultCrime = []
 
-        for x in range(1, 13)
-            resultCrime.append(pull_data(self, query))
-
+        for x in range(1, 13):
+            prepared = (x,)
+            resultCrime.append(pull_data(lwapp.db, query, prepared)
         
 
         cpm = Figure(figsize=(5,5), dpi=100)
         a = cpm.add_subplot(111) #111 means 1 by 1, 121 means 1 by 2
 
-        a.plot(resultMonth, resultCrime)
+        a.bar(resultMonth, resultCrime)
+
+        canvas = FigureCanvasTkAgg(cpm, self)
+        canvas.show()
+        canvas.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand = True)
 
 
 
