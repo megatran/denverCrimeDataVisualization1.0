@@ -178,9 +178,17 @@ class PageThree(tk.Frame):
         print(x_chart)
         print(y_chart)
 
-        width = 1/1.5
-        plt.bar(x_chart,y_chart, width, color="blue")
+       # width = 1/1.5
+        x = range(len(x_chart))
+        plt.bar(x,y_chart, align="center", color="blue")
+        plt.set_xticks(x)
+        plt.set_xticklabels(x_chart)
+        plt.set_xlabel("Precints")
+        plt.set_ylabel("Crime Count")
+        plt.set_title("Crimes by Precints")
+        #plt.autoscale_view(True, True, True)
 
+        f.autofmt_xdate()
         canvas = FigureCanvasTkAgg(f, self)
         canvas.show()
         canvas.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand = True)
