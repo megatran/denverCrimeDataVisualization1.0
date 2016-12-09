@@ -14,15 +14,26 @@ import pg8000
 
 LARGE_FONT = ("Verdana", 12)
 
-def pull_data(db, string_query):
+def pull_data(db, string_query, *args, **kwargs):
     ###############
     # pass in login windows
     db = db
     cursor = db.cursor()
     query = string_query
+    query_additional = kwargs.get('query_additional', None)
+    print(query_additional)
+    print(type(query_additional))
+    if query_additional is not None and type(query_additional) is not tuple:
+        raise ValueError("Error in Query. Additional query must be type tuple")
     try:
-        cursor.execute(query)
+        if query_additional is not None and len(query_additional) > 0:
+            #print(query_additional)
+            cursor.execute(query, query_additional)
+        else:
+            cursor.execute(query)
+
         resultset = cursor.fetchall()
+
         return resultset
     except pg8000.Error as e:
         messagebox.showerror('Database error', e.args[2])
@@ -132,7 +143,12 @@ class PageThree(tk.Frame):
         f = Figure(figsize=(5,5), dpi=100)
         a = f.add_subplot(111) #111 means 1 by 1, 121 means 1 by 2
         #a.plot([1,2,3,4,5,6,7,8],[5,6,1,3,8,9,3,5])
-        a.plot(result[0], result[1])
+        #a.plot(result[0], result[1])
+        #print(result)
+        #for res in result:
+         #   print(result[0], result[1])
+
+        a.scatter(result[0], result[1], label="crime vs precint", color='k', s=1)
 
         canvas = FigureCanvasTkAgg(f, self)
         canvas.show()
