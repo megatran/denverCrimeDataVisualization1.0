@@ -44,10 +44,7 @@ class SeaofBTCapp(tk.Tk):
         container.grid_rowconfigure(0, weight=1)
         container.grid_columnconfigure(0, weight=1)
 
-        ###configure db####
-        query = """SELECT precinct_id, count(precinct_id) FROM denver_crime GROUP BY precinct_id ORDER BY count(precinct_id) DESC"""
-        result = pull_data(db, query)
-        print(result)
+
         self.frames = {}
 
         for F in (StartPage, PageOne, PageTwo, PageThree):
@@ -124,11 +121,18 @@ class PageThree(tk.Frame):
                             command=lambda: controller.show_frame(StartPage))
         button1.pack()
 
+        ###database setup###
+        ###configure db####
+        query = """SELECT precinct_id, count(precinct_id) FROM denver_crime GROUP BY precinct_id ORDER BY count(precinct_id) DESC"""
+        result = pull_data(lwapp.db, query)
+        #print(result)
+
         #draw things in backend then bring to front (matplotlib)
 
         f = Figure(figsize=(5,5), dpi=100)
         a = f.add_subplot(111) #111 means 1 by 1, 121 means 1 by 2
-        a.plot([1,2,3,4,5,6,7,8],[5,6,1,3,8,9,3,5])
+        #a.plot([1,2,3,4,5,6,7,8],[5,6,1,3,8,9,3,5])
+        a.plot(result[0], result[1])
 
         canvas = FigureCanvasTkAgg(f, self)
         canvas.show()
