@@ -10,7 +10,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="CoverageDataManager">
-    <SUITE FILE_PATH="coverage/crimeVisualization1_0$crimeVisualization.coverage" NAME="crimeVisualization Coverage Results" MODIFIED="1481317567569" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/crimeVisualization1_0$crimeVisualization.coverage" NAME="crimeVisualization Coverage Results" MODIFIED="1481330923961" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
   <component name="CreatePatchCommitExecutor">
     <option name="PATCH_PATH" value="" />
@@ -21,11 +21,16 @@
       <file leaf-file-name="crimeVisualization.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/crimeVisualization.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="292">
-              <caret line="184" column="36" lean-forward="true" selection-start-line="184" selection-start-column="36" selection-end-line="184" selection-end-column="36" />
+            <state relative-caret-position="347">
+              <caret line="258" column="72" lean-forward="false" selection-start-line="258" selection-start-column="72" selection-end-line="258" selection-end-column="72" />
               <folding>
-                <marker date="1481317602000" expanded="true" signature="2912:2994" ph="SELECT count... denver_crime" />
-                <marker date="1481317602000" expanded="true" signature="5109:5219" ph="SELECT preci... denver_crime" />
+                <marker date="1481331045000" expanded="true" signature="2954:3028" ph="SELECT DISTI... denver_crime" />
+                <marker date="1481331045000" expanded="true" signature="4106:4280" ph="SELECT neigh... denver_crime" />
+                <marker date="1481331045000" expanded="true" signature="5367:5449" ph="SELECT count... denver_crime" />
+                <marker date="1481331045000" expanded="true" signature="7417:7465" ph="SELECT count... denver_crime" />
+                <marker date="1481331045000" expanded="true" signature="7496:7546" ph="SELECT count... denver_crime" />
+                <marker date="1481331045000" expanded="true" signature="7574:7637" ph="SELECT count... denver_crime" />
+                <marker date="1481331045000" expanded="true" signature="10526:10636" ph="SELECT preci... denver_crime" />
               </folding>
             </state>
           </provider>
@@ -46,6 +51,17 @@
       <find>self.db</find>
       <find>db</find>
       <find>print(result</find>
+      <find>controller</find>
+      <find>show_frame</find>
+      <find>show()</find>
+      <find>pie</find>
+      <find>crimetypefilter</find>
+      <find>updategraph</find>
+      <find>label</find>
+      <find>updateGraph</find>
+      <find>crimes</find>
+      <find>loadData</find>
+      <find>load</find>
     </findStrings>
   </component>
   <component name="IdeDocumentHistory">
@@ -409,19 +425,29 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <marker date="1481317602000" expanded="true" signature="2912:2994" ph="SELECT count... denver_crime" />
-            <marker date="1481317602000" expanded="true" signature="5109:5219" ph="SELECT preci... denver_crime" />
+            <marker date="1481331045000" expanded="true" signature="2954:3028" ph="SELECT DISTI... denver_crime" />
+            <marker date="1481331045000" expanded="true" signature="4106:4280" ph="SELECT neigh... denver_crime" />
+            <marker date="1481331045000" expanded="true" signature="5367:5449" ph="SELECT count... denver_crime" />
+            <marker date="1481331045000" expanded="true" signature="7417:7465" ph="SELECT count... denver_crime" />
+            <marker date="1481331045000" expanded="true" signature="7496:7546" ph="SELECT count... denver_crime" />
+            <marker date="1481331045000" expanded="true" signature="7574:7637" ph="SELECT count... denver_crime" />
+            <marker date="1481331045000" expanded="true" signature="10526:10636" ph="SELECT preci... denver_crime" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/crimeVisualization.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="292">
-          <caret line="184" column="36" lean-forward="true" selection-start-line="184" selection-start-column="36" selection-end-line="184" selection-end-column="36" />
+        <state relative-caret-position="347">
+          <caret line="258" column="72" lean-forward="false" selection-start-line="258" selection-start-column="72" selection-end-line="258" selection-end-column="72" />
           <folding>
-            <marker date="1481317602000" expanded="true" signature="2912:2994" ph="SELECT count... denver_crime" />
-            <marker date="1481317602000" expanded="true" signature="5109:5219" ph="SELECT preci... denver_crime" />
+            <marker date="1481331045000" expanded="true" signature="2954:3028" ph="SELECT DISTI... denver_crime" />
+            <marker date="1481331045000" expanded="true" signature="4106:4280" ph="SELECT neigh... denver_crime" />
+            <marker date="1481331045000" expanded="true" signature="5367:5449" ph="SELECT count... denver_crime" />
+            <marker date="1481331045000" expanded="true" signature="7417:7465" ph="SELECT count... denver_crime" />
+            <marker date="1481331045000" expanded="true" signature="7496:7546" ph="SELECT count... denver_crime" />
+            <marker date="1481331045000" expanded="true" signature="7574:7637" ph="SELECT count... denver_crime" />
+            <marker date="1481331045000" expanded="true" signature="10526:10636" ph="SELECT preci... denver_crime" />
           </folding>
         </state>
       </provider>
