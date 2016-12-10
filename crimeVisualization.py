@@ -105,7 +105,7 @@ class StartPage(tk.Frame):
         # SQL
         # Offense types
         offenseTypes = []
-        offenseQuery = """SELECT DISTINCT offense_type_id FROM offense_codes ORDER BY offense_type_id"""
+        offenseQuery = """SELECT DISTINCT offense_type_id FROM denver_crime ORDER BY offense_type_id"""
         resultSet = pull_data(lwapp.db, offenseQuery)
         for r in resultSet:
             offenseTypes.append(r[0])
@@ -117,13 +117,14 @@ class StartPage(tk.Frame):
         crimeTypeFilter = Combobox(self, values = offenseTypes, text='Incident Type')
         crimeTypeFilter.bind("<<ComboboxSelected>>")
         crimeTypeFilter.pack()
-
+        liveF = Figure(figsize=(10,4), dpi=100)
+        a = liveF.add_subplot(111)
         go = ttk.Button(self, text="Apply",
                             command=lambda: self.updateGraph(crimeTypeFilter, a ,canvas))
         go.pack()
 
-        liveF = Figure(figsize=(10,4), dpi=100)
-        a = liveF.add_subplot(111)
+
+
 
         a.set_xticks(self.neighTicks)
         a.set_xticklabels(self.neighborhoods)
@@ -140,14 +141,18 @@ class StartPage(tk.Frame):
     def loadData(self):
         # Query Info
         mainQuery = """SELECT neighborhood_id, count(neighborhood_id) FROM denver_crime WHERE offense_type_id LIKE (%s)
-                GROUP BY neighborhood_id HAVING count(neighborhood_id) > 3000 ORDER BY count(neighborhood_id) DESC"""
+                GROUP BY neighborhood_id ORDER BY count(neighborhood_id) DESC"""
 
         if self.offenseTypeFilter == '':
             self.offenseTypeFilter = '%'
 
-        prepared = (self.offenseTypeFilter,)
-        resultSet = pull_data(lwapp.db, mainQuery, query_additional = prepared)
+        newPrep = '%' + self.offenseTypeFilter + '%'
+        prepared = (newPrep,)
+        resultSet = pull_data(lwapp.db, mainQuery, query_additional=prepared)
 
+
+
+        print()
         self.neighborhoods[:] = []
         self.crimes[:] = []
         for r in resultSet:
@@ -162,11 +167,12 @@ class StartPage(tk.Frame):
 
 
     def updateGraph(self, box, a, c):
-        
 
         self.offenseTypeFilter = box.get()
         self.loadData()
-
+        a.clear()
+        print("UPDATE GRAPH")
+        print(self.crimes)
         a.bar(self.neighTicks, self.crimes, width=1)
         c.show()
 
@@ -250,7 +256,7 @@ class PageTwo(tk.Frame):
         # Plot
         f = Figure(figsize=(5, 5), dpi=100)
         plt = f.add_subplot(111)
-        plt.legend(title="Percentage of Incidents (Crime, Traffic, Both")
+        plt.legend(title="Percentage of Incidents (Crime, Traffic, Both)")
         plt.pie(sizes, explode=explode, labels=labels, colors=colors, autopct='%1.1f%%', shadow=True, startangle=140)
         plt.axis('equal')
 
