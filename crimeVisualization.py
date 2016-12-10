@@ -13,6 +13,7 @@ from tkinter import font
 import pg8000
 
 LARGE_FONT = ("Verdana", 12)
+CRIME_LABEL = "Number of Crimes"
 
 def pull_data(db, string_query, *args, **kwargs):
     ###############
@@ -58,7 +59,7 @@ class SeaofBTCapp(tk.Tk):
 
         self.frames = {}
 
-        for F in (StartPage, PageOne, PageTwo, PageThree):
+        for F in (StartPage, PageOne, PageTwo, PageThree, LeastCrimeDays, WorstPlaces):
             frame = F(container, self)
 
             self.frames[F] = frame
@@ -89,13 +90,21 @@ class StartPage(tk.Frame):
                            command=lambda: controller.show_frame(PageOne))
         button.pack()
 
-        button2 = ttk.Button(self, text="Visit Page 2",
+        button2 = ttk.Button(self, text="Incidents Overview",
                             command=lambda: controller.show_frame(PageTwo))
         button2.pack()
 
         button3 = ttk.Button(self, text="Graph Page",
                             command=lambda: controller.show_frame(PageThree))
         button3.pack()
+
+        button4 = ttk.Button(self, text="Days with the Lowest number of Crimes",
+                            command=lambda: controller.show_frame(LeastCrimeDays))
+        button4.pack()
+
+        button5 = ttk.Button(self, text="Locations with the Most Incidents",
+                            command=lambda: controller.show_frame(WorstPlaces))
+        button5.pack()
 
         self.loadData()
         self.loadButtons()
@@ -212,7 +221,88 @@ class PageOne(tk.Frame):
         button1.pack()
 
 
+class LeastCrimeDays(tk.Frame):
+    def __init__(self, parent, controller):
+        tk.Frame.__init__(self, parent)
+        label = tk.Label(self, text="Days with the Lowest number of Crimes", font=LARGE_FONT)
+        label.pack(pady=10, padx=10)
 
+        query = """SELECT reported_date, count(reported_date) FROM denver_crime 
+        Group By reported_date HAVING count(reported_date) < 100 ORDER BY count(reported_date);"""
+
+        resultMonthTick = []
+        resultDate = []
+        resultCrime = []
+        
+        resultSet = pull_data(lwapp.db, query)
+
+        for r in resultSet:
+            resultDate.append(r[0])
+            resultCrime.append(r[1])
+        
+        # print(resultCrime)
+        
+        i = 1
+        for x in resultDate:
+            resultMonthTick.append(i)
+            i += 1
+
+        cpm = Figure(figsize=(6,4), dpi=100)
+        a = cpm.add_subplot(111) #111 means 1 by 1, 121 means 1 by 2
+
+        a.set_xticks(resultMonthTick)
+        a.set_xticklabels(resultDate)
+        cpm.autofmt_xdate()
+        a.bar(resultMonthTick, resultCrime,width=1, align='center')
+
+        canvas = FigureCanvasTkAgg(cpm, self)
+        canvas.show()
+        canvas.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand = True)
+        
+        button1 = ttk.Button(self, text="Back to Home",
+                            command=lambda: controller.show_frame(StartPage))
+        button1.pack()
+
+
+class WorstPlaces(tk.Frame):
+    def __init__(self, parent, controller):
+        tk.Frame.__init__(self, parent)
+        label = tk.Label(self, text="Days with the Lowest number of Crimes", font=LARGE_FONT)
+        label.pack(pady=10, padx=10)
+
+        query = """SELECT incident_address, count(incident_address) FROM denver_crime WHERE is_traffic
+                GROUP BY incident_address HAVING count(incident_address) > 300 ORDER BY count(incident_address) DESC;"""
+
+        resultMonthTick = []
+        resultDate = []
+        resultCrime = []
+        
+        resultSet = pull_data(lwapp.db, query)
+
+        for r in resultSet:
+            resultDate.append(r[0])
+            resultCrime.append(r[1])
+        
+        i = 1
+        for x in resultDate:
+            resultMonthTick.append(i)
+            i += 1
+
+        cpm = Figure(figsize=(6,4), dpi=100)
+        a = cpm.add_subplot(111) #111 means 1 by 1, 121 means 1 by 2
+
+        a.set_xticks(resultMonthTick)
+        a.set_xticklabels(resultDate)
+        cpm.autofmt_xdate()
+        a.bar(resultMonthTick, resultCrime,width=1, align='center')
+
+        canvas = FigureCanvasTkAgg(cpm, self)
+        canvas.show()
+        canvas.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand = True)
+        
+        button1 = ttk.Button(self, text="Back to Home",
+                            command=lambda: controller.show_frame(StartPage))
+        button1.pack()
 
 class PageTwo(tk.Frame):
     def __init__(self, parent, controller):
