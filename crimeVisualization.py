@@ -129,21 +129,15 @@ class StartPage(tk.Frame):
         liveF = Figure(figsize=(10,4), dpi=100)
         a = liveF.add_subplot(111)
         go = ttk.Button(self, text="Apply",
-                            command=lambda: self.updateGraph(crimeTypeFilter, a ,canvas))
+                            command=lambda: self.updateGraph(crimeTypeFilter, a ,canvas, liveF))
         go.pack()
 
 
 
-
-        a.set_xticks(self.neighTicks)
-        a.set_xticklabels(self.neighborhoods)
-        liveF.autofmt_xdate()
-        matplotlib.rcParams.update({'font.size': 7})
-
         canvas = FigureCanvasTkAgg(liveF, self)
         canvas.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand = True)
 
-        self.updateGraph(crimeTypeFilter, a, canvas)
+        self.updateGraph(crimeTypeFilter, a, canvas, liveF)
 
 
 
@@ -164,25 +158,29 @@ class StartPage(tk.Frame):
         # print()
         self.neighborhoods[:] = []
         self.crimes[:] = []
-        for r in resultSet:
-            self.neighborhoods.append(r[0])
-            self.crimes.append(r[1])
-
         self.neighTicks[:] = []
-        i = 1
-        for x in self.neighborhoods:
+
+        for i in range(0, len(resultSet)):
+            if i > 40:
+                break;
+            self.neighborhoods.append(resultSet[i][0])
+            self.crimes.append(resultSet[i][1])
             self.neighTicks.append(i)
-            i += 1
 
 
-    def updateGraph(self, box, a, c):
+    def updateGraph(self, box, a, c, liveF):
 
         self.offenseTypeFilter = box.get()
         self.loadData()
+
         a.clear()
-        print("UPDATE GRAPH")
-        print(self.crimes)
-        a.bar(self.neighTicks, self.crimes, width=1)
+
+        a.set_xticks(self.neighTicks)
+        a.set_xticklabels(self.neighborhoods)
+        liveF.autofmt_xdate()
+        matplotlib.rcParams.update({'font.size': 7})
+
+        a.bar(self.neighTicks, self.crimes, width=1, align='center')
         c.show()
 
         
