@@ -95,7 +95,7 @@ class StartPage(tk.Frame):
                             command=lambda: controller.show_frame(PageTwo))
         button2.pack()
 
-        button3 = ttk.Button(self, text="Graph Page",
+        button3 = ttk.Button(self, text="Bar Graph of Crime per Precinct",
                             command=lambda: controller.show_frame(PageThree))
         button3.pack()
 
